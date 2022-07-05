@@ -1,19 +1,35 @@
 import { Button, Input } from '@material-ui/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+
 import MinimizeIcon from '@mui/icons-material/Minimize'
 
 import AddIcon from '@mui/icons-material/Add'
 import sliceHome from './sliceHome'
 
 import './home.css'
+import axios from 'axios'
 
 const Home: React.FC = () => {
   const dispatch = useDispatch()
 
   const [inputValue, setInputValue] = useState<string>('')
   const [increase, setIncreate] = useState<number>(1)
+  const [isAdd, setIsAdd] = useState<boolean>(false)
+  const [id, setId] = useState<number>(0)
+
+  const [posts, setPosts] = useState<string[]>([])
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: 'https://js-post-api.herokuapp.com/api/products',
+    }).then(function (res) {
+      // console.log(res.data)
+
+      setPosts(res.data)
+    })
+  }, [])
 
   const navigate = useNavigate()
   const handleToggelButton = () => {
@@ -26,6 +42,9 @@ const Home: React.FC = () => {
   const hanleInput = () => {
     dispatch(sliceHome.actions.homeAction(inputValue))
     setInputValue('')
+  }
+  const hanleInfor = () => {
+    setIsAdd(!isAdd)
   }
 
   return (
@@ -54,6 +73,32 @@ const Home: React.FC = () => {
           {' '}
           Quay lại danh sách việc làm{' '}
         </Button>
+        <Button
+          onClick={hanleInfor}
+          className="icons"
+          variant="contained"
+          color="secondary"
+        >
+          Add
+        </Button>
+      </div>
+
+      <div>
+        {isAdd &&
+          posts.map((post: string) => {
+            return (
+              <img
+                onClick={() => {
+                  console.log(post.id)
+                  setId(post.id)
+                  dispatch(sliceHome.actions.productDetail({ id: post.id }))
+                }}
+                key={post.index}
+                src={post.images[0]}
+                alt="hình ảnh"
+              />
+            )
+          })}
       </div>
     </div>
   )
