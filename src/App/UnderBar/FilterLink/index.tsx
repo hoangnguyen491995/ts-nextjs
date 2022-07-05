@@ -14,6 +14,7 @@ const FilterLink: React.FC = () => {
           All
         </Link>
       </li>
+
       <li>
         <Link
           data-cy="active-filter"
@@ -23,6 +24,7 @@ const FilterLink: React.FC = () => {
           Active
         </Link>
       </li>
+
       <li>
         <Link
           data-cy="completed-filter"
@@ -31,6 +33,9 @@ const FilterLink: React.FC = () => {
         >
           Completed
         </Link>
+      </li>
+      <li>
+        <Link  to='/home' >Home</Link>
       </li>
     </ul>
   )

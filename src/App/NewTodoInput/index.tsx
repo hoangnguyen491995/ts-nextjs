@@ -12,16 +12,18 @@ const NewTodoTextInput: React.FC = () => {
   const textInput: React.RefObject<HTMLInputElement> =
     createRef<HTMLInputElement>()
 
+
+
   function addTodo(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (textInput.current === null) return
     if (e.key === 'Enter' && textInput.current.value.trim().length > 0) {
       // make new TODO object
       const todo: Todo = {
         bodyText: textInput.current.value,
+
         completed: false,
         id: UUID(),
       }
-
       // add new TODO to entire TodoList
       setAppState({ todoList: [todo, ...appState.todoList] })
 
@@ -37,7 +39,7 @@ const NewTodoTextInput: React.FC = () => {
         <input
           type="text"
           className="new-todo"
-          placeholder="What needs to be done?"
+          placeholder="What needs to be done1?"
           ref={textInput}
           onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => addTodo(e)}
           data-testid="new-todo-input-text"
@@ -45,6 +47,7 @@ const NewTodoTextInput: React.FC = () => {
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
         />
+        
       </header>
     </Layout>
   )

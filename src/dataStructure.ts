@@ -7,6 +7,7 @@ export interface Todo {
   id: string
   bodyText: string
   completed: boolean
+
 }
 
 export type TodoListType = Todo[]
@@ -14,6 +15,7 @@ export type TodoListType = Todo[]
 export interface AppState {
   todoList: TodoListType
 }
+
 
 export enum LocalStorageKey {
   APP_STATE = 'APP_STATE',

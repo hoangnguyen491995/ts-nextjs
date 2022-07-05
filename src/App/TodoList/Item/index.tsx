@@ -1,10 +1,11 @@
 import React, { useState, createRef, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-
+import { useSelector } from 'react-redux'
 import type { AppState, Todo, TodoListType } from '../../../dataStructure'
 import { recoilState } from '../../../dataStructure'
 
 import { Layout } from './style'
+import { homeValue$ } from '../../../redux/selector'
 
 interface Props {
   todo: Todo
@@ -15,7 +16,10 @@ interface State {
 }
 
 const Item: React.FC<Props> = ({ todo }) => {
+  const valueReturn = useSelector(homeValue$)
+
   const [appState, setAppState] = useRecoilState<AppState>(recoilState)
+
   const editInput = createRef<HTMLInputElement>()
   const init: State = { onEdit: false }
   const [state, setState] = useState(init)
@@ -80,7 +84,11 @@ const Item: React.FC<Props> = ({ todo }) => {
     setAppState({ todoList: removed })
   }
 
-  const handleTodoTextEdit = (e: React.ChangeEvent<HTMLInputElement>, onEdit: Todo['id']): void => { /* eslint-disable-line prettier/prettier */
+  const handleTodoTextEdit = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onEdit: Todo['id']
+  ): void => {
+    /* eslint-disable-line prettier/prettier */
     const edited = appState.todoList.map((t: Todo): Todo => {
       if (t.id === onEdit) {
         return { ...t, bodyText: e.target.value }
@@ -117,8 +125,10 @@ const Item: React.FC<Props> = ({ todo }) => {
             data-cy="todo-body-text"
             data-testid="todo-body-text"
           >
-            {todo.bodyText}
+            {todo.bodyText}    
           </label>
+          <label> Content: {valueReturn.hours}</label>
+
           {/* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events */}
           <button
             className="destroy"
@@ -132,9 +142,13 @@ const Item: React.FC<Props> = ({ todo }) => {
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => onBlurEdit(e)}
           className="edit"
           value={todo.bodyText}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTodoTextEdit(e, todo.id)} /* eslint-disable-line prettier/prettier */
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => submitEditText(e)} /* eslint-disable-line prettier/prettier */
-          data-cy="todo-edit-input"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleTodoTextEdit(e, todo.id)
+          } /* eslint-disable-line prettier/prettier */
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+            submitEditText(e)
+          } /* eslint-disable-line prettier/prettier */
+          data-cy="todo-edit-input"   
           data-testid="todo-edit-input"
         />
       </li>
